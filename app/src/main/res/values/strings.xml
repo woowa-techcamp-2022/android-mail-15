@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Woowa Camp - Mail</string>
+    <string name="app_name">W mail</string>
 
     <string name="hint_nickname">닉네임</string>
     <string name="hint_email">이메일</string>
