@@ -83,6 +83,8 @@ class MainActivity : AppCompatActivity() {
         startActivity(
             Intent(this, HomeActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                putExtra(HomeActivity.NICKNAME_EXTRA, nickname)
+                putExtra(HomeActivity.EMAIL_EXTRA, email)
             }
         )
     }
