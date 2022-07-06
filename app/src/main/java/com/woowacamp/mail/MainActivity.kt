@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             nicknameEdit.addTextChangedListener {
-                nicknameValid = if (it == null || it.length < 4) {
+                val regex = "^(?=.*?[a-zA-Z])(?=.*?[0-9]).{4,}$".toRegex()
+                nicknameValid = if (it == null || !it.matches(regex)) {
                     nicknameLayout.error = getString(R.string.warn_nickname)
                     false
                 } else {
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 nextButton.isEnabled = nicknameValid && emailValid
             }
             emailEdit.addTextChangedListener {
-                val regex = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$".toRegex()
+                val regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$".toRegex()
                 emailValid = if (it == null || !it.matches(regex)) {
                     emailLayout.error = getString(R.string.warn_email)
                     false
@@ -59,8 +60,8 @@ class MainActivity : AppCompatActivity() {
 
             nextButton.setOnClickListener {
                 startHomeActivity(
-                    nicknameEdit.toString(),
-                    emailEdit.toString()
+                    nicknameEdit.text.toString(),
+                    emailEdit.text.toString()
                 )
             }
         }
@@ -68,13 +69,14 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * 기기를 회전시켜도 입력한 값을 유지
+     * 수정 : EditText 는 해당 처리 없이도 데이터 프리징
      */
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(NICKNAME_KEY, binding.nicknameEdit.toString())
-        outState.putString(EMAIL_KEY, binding.emailEdit.toString())
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//
+//        outState.putString(NICKNAME_KEY, binding.nicknameEdit.text.toString())
+//        outState.putString(EMAIL_KEY, binding.emailEdit.text.toString())
+//    }
 
     /**
      * 액티비티 스택에 전환된 화면 하나만 존재 하도록 flag 추가
