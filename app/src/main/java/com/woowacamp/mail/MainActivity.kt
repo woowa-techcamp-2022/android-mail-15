@@ -47,14 +47,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             nextButton.setOnClickListener {
-                startEmailActivity()
+                startHomeActivity()
             }
         }
     }
 
-    private fun startEmailActivity() {
-//        startActivity(
-//            Intent()
-//        )
+    /**
+     * 액티비티 스택에 전환된 화면 하나만 존재 하도록 flag 추가
+     * ACTIVITY_CLEAR_TASK :: 실행 액티비티 외 스택에서 모두 제거
+     * ACTIVITY_NEW_TASK :: 동일 액티비티가 스택에 존재하면 새 인스턴스로 대체
+     */
+    private fun startHomeActivity() {
+        startActivity(
+            Intent(this, HomeActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        )
     }
 }
