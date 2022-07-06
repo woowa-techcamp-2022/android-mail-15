@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
 
             nextButton.setOnClickListener {
                 startHomeActivity(
-                    nicknameEdit.toString(),
-                    emailEdit.toString()
+                    nicknameEdit.text.toString(),
+                    emailEdit.text.toString()
                 )
             }
         }
@@ -67,13 +67,14 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * 기기를 회전시켜도 입력한 값을 유지
+     * 수정 : EditText 는 해당 처리 없이도 데이터 프리징
      */
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(NICKNAME_KEY, binding.nicknameEdit.toString())
-        outState.putString(EMAIL_KEY, binding.emailEdit.toString())
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//
+//        outState.putString(NICKNAME_KEY, binding.nicknameEdit.text.toString())
+//        outState.putString(EMAIL_KEY, binding.emailEdit.text.toString())
+//    }
 
     /**
      * 액티비티 스택에 전환된 화면 하나만 존재 하도록 flag 추가
