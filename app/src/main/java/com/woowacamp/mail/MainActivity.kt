@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             nicknameEdit.addTextChangedListener {
-                nicknameValid = if (it == null || it.length < 4) {
+                val regex = "^(?=.*?[a-zA-Z])(?=.*?[0-9]).{4,}$".toRegex()
+                nicknameValid = if (it == null || !it.matches(regex)) {
                     nicknameLayout.error = getString(R.string.warn_nickname)
                     false
                 } else {
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 nextButton.isEnabled = nicknameValid && emailValid
             }
             emailEdit.addTextChangedListener {
-                val regex = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$".toRegex()
+                val regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$".toRegex()
                 emailValid = if (it == null || !it.matches(regex)) {
                     emailLayout.error = getString(R.string.warn_email)
                     false
