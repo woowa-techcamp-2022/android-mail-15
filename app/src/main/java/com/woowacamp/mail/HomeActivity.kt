@@ -2,7 +2,7 @@ package com.woowacamp.mail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.woowacamp.mail.databinding.ActivityMainBinding
+import com.woowacamp.mail.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
     companion object {
@@ -10,14 +10,12 @@ class HomeActivity : AppCompatActivity() {
         const val EMAIL_EXTRA = "EMAIL_EXTRA"
     }
 
-    private var _binding: ActivityMainBinding? = null
-    private val binding: ActivityMainBinding get() = requireNotNull(_binding)
+    private var _binding: ActivityHomeBinding? = null
+    private val binding: ActivityHomeBinding get() = requireNotNull(_binding)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
     }
 }
