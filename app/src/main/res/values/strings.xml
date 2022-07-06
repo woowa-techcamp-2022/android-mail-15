@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Woowa Camp - Mail</string>
+    <string name="hint_text">닉네임</string>
 </resources>
