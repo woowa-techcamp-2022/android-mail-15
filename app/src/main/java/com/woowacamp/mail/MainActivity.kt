@@ -27,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
-
         binding.apply {
             if (savedInstanceState != null) {
                 nicknameEdit.setText(savedInstanceState.getString(NICKNAME_KEY))
