@@ -3,6 +3,8 @@ package com.woowacamp.mail
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.android.material.tabs.TabLayoutMediator
+import com.woowacamp.mail.adapter.FragmentAdapter
 import com.woowacamp.mail.databinding.ActivityHomeBinding
 import com.woowacamp.mail.databinding.ActivityHomeWideBinding
 
@@ -19,6 +21,23 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.apply {
+            viewPager.adapter = FragmentAdapter(this@HomeActivity)
+
+            val tabNames = arrayOf(
+                getString(R.string.mail),
+                getString(R.string.setting)
+            )
+            val tabIcons = arrayOf(
+                R.drawable.ic_mail,
+                R.drawable.ic_settings
+            )
+            TabLayoutMediator(tabView, viewPager) { tab, pos ->
+                tab.text = tabNames[pos]
+                tab.setIcon(tabIcons[pos])
+            }.attach()
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
