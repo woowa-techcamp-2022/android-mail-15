@@ -34,8 +34,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             nicknameEdit.addTextChangedListener {
-                val regex = "^(?=.*?[a-zA-Z])(?=.*?[0-9]).{4,}$".toRegex()
-                nicknameValid = if (it == null || !it.matches(regex)) {
+                val regex1 = "^(?=.*?[a-zA-Z])(?=.*?[0-9]).{4,}$".toRegex()
+                val regex2 = "^[a-zA-Z0-9]{4,}$".toRegex()
+                nicknameValid = if (it == null || !it.matches(regex1) || !it.matches(regex2)) {
                     nicknameLayout.error = getString(R.string.warn_nickname)
                     false
                 } else {
