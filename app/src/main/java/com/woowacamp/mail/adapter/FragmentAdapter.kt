@@ -10,10 +10,17 @@ import com.woowacamp.mail.fragment.SettingFragment
 class FragmentAdapter(private val fa: FragmentActivity): FragmentStateAdapter(fa) {
 
     private val mails = mutableListOf<Mail>()
+    private var nickname = ""
+    private var email = ""
 
     fun updateList(mails: List<Mail>) {
         this.mails.clear()
         this.mails.addAll(mails)
+        notifyDataSetChanged()
+    }
+    fun updateInfo(nickname: String, email: String) {
+        this.nickname = nickname
+        this.email = email
         notifyDataSetChanged()
     }
 
@@ -22,7 +29,7 @@ class FragmentAdapter(private val fa: FragmentActivity): FragmentStateAdapter(fa
     override fun createFragment(position: Int): Fragment {
         return when(position) {
             0 -> MailFragment(mails)
-            1 -> SettingFragment()
+            1 -> SettingFragment(nickname, email)
             else -> MailFragment(mails)
         }
     }

@@ -26,6 +26,7 @@ class HomeActivity : AppCompatActivity() {
         binding.apply {
             val adapter = FragmentAdapter(this@HomeActivity)
             adapter.updateList(DataManager().parseMailList())
+            adapter.updateInfo(intent.getStringExtra(NICKNAME_EXTRA)?: "", intent.getStringExtra(EMAIL_EXTRA)?: "")
             viewPager.adapter = adapter
 
             val tabNames = arrayOf(
