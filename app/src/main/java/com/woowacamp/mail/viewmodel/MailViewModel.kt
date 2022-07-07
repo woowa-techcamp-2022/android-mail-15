@@ -6,10 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 
 class MailViewModel: ViewModel() {
 
-    val type = MutableLiveData<Int>(0)
+    val type = MutableLiveData(0)
+    val tab = MutableLiveData(0)
 
     fun changeType(type: Int) {
         this.type.postValue(type)
+    }
+    fun changeTab(tab: Int) {
+        this.tab.postValue(tab)
     }
 }
 

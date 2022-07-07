@@ -1,12 +1,13 @@
 package com.woowacamp.mail
 
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.tabs.TabLayoutMediator
-import com.woowacamp.mail.adapter.FragmentAdapter
+import com.google.android.material.navigationrail.NavigationRailView
+import com.google.android.material.tabs.TabLayout
 import com.woowacamp.mail.databinding.ActivityHomeBinding
+import com.woowacamp.mail.fragment.MailFragment
+import com.woowacamp.mail.fragment.SettingFragment
 import com.woowacamp.mail.viewmodel.MailViewModel
 import com.woowacamp.mail.viewmodel.MailViewModelFactory
 
@@ -14,13 +15,17 @@ class HomeActivity : AppCompatActivity() {
     companion object {
         const val NICKNAME_EXTRA = "NICKNAME_EXTRA"
         const val EMAIL_EXTRA = "EMAIL_EXTRA"
+
+        const val TAB_STATE = "TAB_STATE"
+        const val MAIL_TYPE_STATE = "MAIL_TYPE_STATE"
     }
 
     private var _binding: ActivityHomeBinding? = null
     private val binding: ActivityHomeBinding get() = requireNotNull(_binding)
     private lateinit var viewModel: MailViewModel
 
-    private lateinit var adapter: FragmentAdapter
+    private val mailFragment = MailFragment()
+    private val settingFragment = SettingFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,40 +33,70 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this, MailViewModelFactory())[MailViewModel::class.java]
-        adapter = FragmentAdapter(this)
 
         binding.apply {
-            adapter.updateType(0)
-            adapter.updateInfo(intent.getStringExtra(NICKNAME_EXTRA)?: "", intent.getStringExtra(EMAIL_EXTRA)?: "")
-            viewPager.adapter = adapter
+            /**
+             * TabLayout 과 NavigationRailView 간의 구성 차이
+             */
+            var bundle = Bundle()
+            bundle.putInt(MailFragment.TYPE_ARGUMENT, viewModel.type.value ?: 0)
+            mailFragment.arguments = bundle
 
-            val tabNames = arrayOf(
-                getString(R.string.mail),
-                getString(R.string.setting)
-            )
-            val tabIcons = arrayOf(
-                R.drawable.ic_mail,
-                R.drawable.ic_settings
-            )
-            TabLayoutMediator(tabView, viewPager) { tab, pos ->
-                tab.text = tabNames[pos]
-                tab.setIcon(tabIcons[pos])
-            }.attach()
+            bundle = Bundle()
+            bundle.putString(SettingFragment.NICKNAME_ARGUMENT, intent.getStringExtra(NICKNAME_EXTRA)?: "UNKNOWN")
+            bundle.putString(SettingFragment.EMAIL_ARGUMENT, intent.getStringExtra(EMAIL_EXTRA)?: "UNKNOWN")
+            settingFragment.arguments = bundle
+
+            supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
+
+            tabView?.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (tab?.position) {
+                        0 -> supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
+                        1 -> supportFragmentManager.beginTransaction().replace(R.id.viewPager, settingFragment).commit()
+                    }
+                    viewModel.changeTab(tab?.position?: 0)
+                }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                }
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
+            })
+            railView?.setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.mail_menu -> {
+                        supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
+                        viewModel.changeTab(0)
+                        true
+                    }
+                    R.id.setting_menu -> {
+                        supportFragmentManager.beginTransaction().replace(R.id.viewPager, settingFragment).commit()
+                        viewModel.changeTab(1)
+                        true
+                    }
+                    else -> false
+                }
+            }
 
             viewModel.type.observe(this@HomeActivity) {
-                adapter.updateType(it)
+                tabView?.getTabAt(0)?.select()
+                railView?.selectedItemId = R.id.mail_menu
+                mailFragment.updateView(it)
+                drawer.closeDrawer(leftDrawer)
             }
+            viewModel.tab.observe(this@HomeActivity) {
+                tabView?.getTabAt(it)?.select()
+                railView?.selectedItemId = R.id.mail_menu + it
+            }
+
             primaryBtn.setOnClickListener {
                 viewModel.changeType(0)
-                drawer.closeDrawer(leftDrawer)
             }
             socialBtn.setOnClickListener {
                 viewModel.changeType(1)
-                drawer.closeDrawer(leftDrawer)
             }
             promotionBtn.setOnClickListener {
                 viewModel.changeType(2)
-                drawer.closeDrawer(leftDrawer)
             }
 
             menu.setOnClickListener {
@@ -70,26 +105,22 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * configuration 변경을 감지하여 xml 파일을 직접 바꿔보려 했지만
-     * 바인딩 문제로 코드 구조가 복잡해 질 우려 있어, 일단 보류
-     * 다른 방법 강구
-     */
-//    override fun onConfigurationChanged(newConfig: Configuration) {
-//        super.onConfigurationChanged(newConfig)
-//        if (newConfig.screenWidthDp >= 600) {
-//            setContentView(R.layout.activity_home_wide)
-//        } else {
-//            setContentView(R.layout.activity_home)
-//        }
-//    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(TAB_STATE, binding.tabView?.selectedTabPosition?: binding.railView?.selectedItemId?.minus(R.id.mail_menu)?: 0)
+        outState.putInt(MAIL_TYPE_STATE, viewModel.type.value?: 0)
+    }
 
     override fun onBackPressed() {
         if (binding.drawer.isDrawerOpen(binding.leftDrawer)) {
             binding.drawer.closeDrawer(binding.leftDrawer)
-        } else if (binding.tabView.selectedTabPosition != 0 || viewModel.type.value != 0) {
+        } else if (
+            (binding.tabView?.selectedTabPosition != null && binding.tabView?.selectedTabPosition != 0)
+            || (binding.railView?.selectedItemId != null && binding.railView?.selectedItemId != R.id.mail_menu)
+            || viewModel.type.value != 0
+        ) {
             viewModel.changeType(0)
-            binding.tabView.getTabAt(0)?.select()
         } else {
             super.onBackPressed()
         }
