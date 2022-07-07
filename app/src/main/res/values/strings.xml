@@ -10,4 +10,7 @@
     <string name="mail">Mail</string>
     <string name="setting">Setting</string>
 
+    <string name="primary">Primary</string>
+    <string name="social">Social</string>
+    <string name="promotion">Promotion</string>
 </resources>

@@ -5,7 +5,9 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_create.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_mail.xml" value="0.2295" />
+        <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.2295" />
+        <entry key="app/src/main/res/drawable/ic_promotion.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_settings.xml" value="0.2295" />
         <entry key="app/src/main/res/drawable/round_view.xml" value="0.2285" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.1" />
@@ -13,7 +15,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_mail.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.221875" />
-        <entry key="app/src/main/res/layout/item_mail.xml" value="0.221875" />
+        <entry key="app/src/main/res/layout/item_mail.xml" value="0.1" />
       </map>
     </option>
   </component>
