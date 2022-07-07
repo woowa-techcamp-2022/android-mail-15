@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="warning">#FFEE4444</color>
+
+    <color name="profile1">#A7A</color>
+    <color name="profile2">#7AA</color>
+    <color name="profile3">#AA7</color>
+    <color name="profile4">#7A7</color>
+    <color name="profile5">#A77</color>
 </resources>

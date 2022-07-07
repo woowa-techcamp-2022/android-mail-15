@@ -7,6 +7,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.woowacamp.mail.adapter.FragmentAdapter
 import com.woowacamp.mail.databinding.ActivityHomeBinding
 import com.woowacamp.mail.databinding.ActivityHomeWideBinding
+import com.woowacamp.mail.utils.DataManager
 
 class HomeActivity : AppCompatActivity() {
     companion object {
@@ -23,7 +24,9 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            viewPager.adapter = FragmentAdapter(this@HomeActivity)
+            val adapter = FragmentAdapter(this@HomeActivity)
+            adapter.updateList(DataManager().parseMailList())
+            viewPager.adapter = adapter
 
             val tabNames = arrayOf(
                 getString(R.string.mail),

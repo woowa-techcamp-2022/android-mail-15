@@ -7,11 +7,15 @@ import com.woowacamp.mail.data.Mail
 import com.woowacamp.mail.fragment.MailFragment
 import com.woowacamp.mail.fragment.SettingFragment
 
-class FragmentAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
-
-    private val fa = fa
+class FragmentAdapter(private val fa: FragmentActivity): FragmentStateAdapter(fa) {
 
     private val mails = mutableListOf<Mail>()
+
+    fun updateList(mails: List<Mail>) {
+        this.mails.clear()
+        this.mails.addAll(mails)
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int = 2
 
