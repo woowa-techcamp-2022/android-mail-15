@@ -52,4 +52,12 @@ class HomeActivity : AppCompatActivity() {
             setContentView(R.layout.activity_home)
         }
     }
+
+    override fun onBackPressed() {
+        if (binding.tabView.selectedTabPosition != 0) {
+            binding.tabView.getTabAt(0)?.select()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }
