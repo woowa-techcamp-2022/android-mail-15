@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary">
 <androidx.appcompat.widget.LinearLayoutCompat
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,13 +30,6 @@
             android:textSize="22dp"
             android:textColor="?attr/colorOnSecondary"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <TextView
-        android:id="@+id/type_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/primary"
-        android:padding="10dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
