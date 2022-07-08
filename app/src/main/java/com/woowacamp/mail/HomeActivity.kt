@@ -47,7 +47,13 @@ class HomeActivity : AppCompatActivity() {
             bundle.putString(SettingFragment.EMAIL_ARGUMENT, intent.getStringExtra(EMAIL_EXTRA)?: "UNKNOWN")
             settingFragment.arguments = bundle
 
-            supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
+            if (viewModel.tab.value == 1) {
+                railView?.menu?.findItem(R.id.setting_menu)?.isChecked = true
+                supportFragmentManager.beginTransaction().replace(R.id.viewPager, settingFragment).commit()
+            } else {
+                railView?.menu?.findItem(R.id.mail_menu)?.isChecked = true
+                supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
+            }
 
             tabView?.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -65,11 +71,16 @@ class HomeActivity : AppCompatActivity() {
             railView?.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.mail_menu -> {
+                        println("mail")
+                        bundle = Bundle()
+                        bundle.putInt(MailFragment.TYPE_ARGUMENT, viewModel.type.value ?: 0)
+                        mailFragment.arguments = bundle
                         supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
                         viewModel.changeTab(0)
                         true
                     }
                     R.id.setting_menu -> {
+                        println("setting")
                         supportFragmentManager.beginTransaction().replace(R.id.viewPager, settingFragment).commit()
                         viewModel.changeTab(1)
                         true
@@ -79,14 +90,19 @@ class HomeActivity : AppCompatActivity() {
             }
 
             viewModel.type.observe(this@HomeActivity) {
-                tabView?.getTabAt(0)?.select()
-                railView?.selectedItemId = R.id.mail_menu
                 mailFragment.updateView(it)
                 drawer.closeDrawer(leftDrawer)
             }
             viewModel.tab.observe(this@HomeActivity) {
                 tabView?.getTabAt(it)?.select()
-                railView?.selectedItemId = R.id.mail_menu + it
+                railView?.menu?.findItem(R.id.mail_menu + it)?.isChecked = true
+                bundle = Bundle()
+                bundle.putInt(MailFragment.TYPE_ARGUMENT, viewModel.type.value ?: 0)
+                mailFragment.arguments = bundle
+                if (it == 0)
+                    supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
+                else
+                    supportFragmentManager.beginTransaction().replace(R.id.viewPager, settingFragment).commit()
             }
 
             primaryBtn.setOnClickListener {
@@ -113,12 +129,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        println("${viewModel.tab.value}  ${viewModel.type.value}")
         if (binding.drawer.isDrawerOpen(binding.leftDrawer)) {
             binding.drawer.closeDrawer(binding.leftDrawer)
         } else if (
-            (binding.tabView?.selectedTabPosition != null && binding.tabView?.selectedTabPosition != 0)
-            || (binding.railView?.selectedItemId != null && binding.railView?.selectedItemId != R.id.mail_menu)
-            || viewModel.type.value != 0
+            viewModel.tab.value != 0 || viewModel.type.value != 0
         ) {
             viewModel.changeType(0)
         } else {

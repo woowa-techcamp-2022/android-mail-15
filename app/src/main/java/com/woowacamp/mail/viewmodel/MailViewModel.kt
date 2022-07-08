@@ -11,6 +11,7 @@ class MailViewModel: ViewModel() {
 
     fun changeType(type: Int) {
         this.type.postValue(type)
+        this.tab.postValue(0)
     }
     fun changeTab(tab: Int) {
         this.tab.postValue(tab)
