@@ -71,17 +71,10 @@ class HomeActivity : AppCompatActivity() {
             railView?.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.mail_menu -> {
-                        println("mail")
-                        bundle = Bundle()
-                        bundle.putInt(MailFragment.TYPE_ARGUMENT, viewModel.type.value ?: 0)
-                        mailFragment.arguments = bundle
-                        supportFragmentManager.beginTransaction().replace(R.id.viewPager, mailFragment).commit()
                         viewModel.changeTab(0)
                         true
                     }
                     R.id.setting_menu -> {
-                        println("setting")
-                        supportFragmentManager.beginTransaction().replace(R.id.viewPager, settingFragment).commit()
                         viewModel.changeTab(1)
                         true
                     }
